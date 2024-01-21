@@ -1,6 +1,8 @@
 package counter
 
-import "io"
+import (
+	"io"
+)
 
 type option func(*counter) error
 
@@ -14,6 +16,13 @@ func WithInitialCount(value uint) option {
 func WithWriter(w io.Writer) option {
 	return func(c *counter) error {
 		c.writer = w
+		return nil
+	}
+}
+
+func WithInterval(interval Interval) option {
+	return func(c *counter) error {
+		c.interval = interval
 		return nil
 	}
 }

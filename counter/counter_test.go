@@ -3,6 +3,7 @@ package counter
 import (
 	"bytes"
 	"testing"
+	"time"
 )
 
 func TestCounter_NewCounter(t *testing.T) {
@@ -79,4 +80,33 @@ func TestCounter_Run(t *testing.T) {
 			t.Errorf("Expected '%v', got '%v'", want, got)
 		}
 	})
+
+	t.Run("Run prints the succession of numbers with time intervals", func(t *testing.T) {
+		t.Parallel()
+
+		writer := &bytes.Buffer{}
+		interval := newStubInterval(1 * time.Millisecond)
+		c, _ := NewCounter(WithWriter(writer), WithInterval(interval))
+
+		c.Run(3)
+
+		got := interval.(*stubInterval).calls
+		if got != 3 {
+			t.Errorf("Expected 3 calls to interval.Sleep, got %v", got)
+		}
+	})
+
+}
+
+type stubInterval struct {
+	duration time.Duration
+	calls    int
+}
+
+func (s *stubInterval) Sleep() {
+	s.calls++
+}
+
+func newStubInterval(d time.Duration) Interval {
+	return &stubInterval{duration: d}
 }
