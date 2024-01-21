@@ -40,7 +40,15 @@ func TestCounter_NewCounter(t *testing.T) {
 	})
 
 	t.Run("NewCounter accepts an optional io.Writer", func(t *testing.T) {
+		t.Parallel()
+		writer := &bytes.Buffer{}
+		c, _ := NewCounter(WithWriter(writer))
 
+		c.Run(1)
+
+		if writer.String() == "" {
+			t.Errorf("Expected writer to be written to.")
+		}
 	})
 }
 
