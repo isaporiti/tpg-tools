@@ -4,12 +4,8 @@ import "io"
 
 type option func(*counter) error
 
-func WithInitialCount(value int) option {
+func WithInitialCount(value uint) option {
 	return func(c *counter) error {
-		if value < 0 {
-			return ErrNoNegativeValues
-		}
-
 		c.count = value
 		return nil
 	}

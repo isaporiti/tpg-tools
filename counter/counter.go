@@ -7,7 +7,7 @@ import (
 )
 
 type counter struct {
-	count  int
+	count  uint
 	writer io.Writer
 }
 
@@ -25,7 +25,7 @@ func NewCounter(options ...option) (*counter, error) {
 	return c, nil
 }
 
-func (c *counter) Next() (next int) {
+func (c *counter) Next() (next uint) {
 	next = c.count
 	c.count++
 	return next

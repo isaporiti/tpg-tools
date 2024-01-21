@@ -26,19 +26,6 @@ func TestCounter_NewCounter(t *testing.T) {
 		}
 	})
 
-	t.Run("NewCounter doesn't accept negative initial values", func(t *testing.T) {
-		t.Parallel()
-		c, err := NewCounter(WithInitialCount(-1))
-
-		if err != ErrNoNegativeValues {
-			t.Errorf("Expected %v, got %v", ErrNoNegativeValues, err)
-		}
-
-		if c != nil {
-			t.Errorf("Expected nil, got %v", c)
-		}
-	})
-
 	t.Run("NewCounter accepts an optional io.Writer", func(t *testing.T) {
 		t.Parallel()
 		writer := &bytes.Buffer{}
@@ -68,7 +55,7 @@ func TestCounter_Next(t *testing.T) {
 		t.Parallel()
 		c, _ := NewCounter()
 
-		for want := 0; want < 10; want++ {
+		for want := uint(0); want < 10; want++ {
 			got := c.Next()
 			if got != want {
 				t.Errorf("Expected %v, got %v", want, got)
