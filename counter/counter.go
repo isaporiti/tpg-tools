@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"time"
 )
 
 type counter struct {
@@ -13,28 +12,10 @@ type counter struct {
 	interval Interval
 }
 
-type Interval interface {
-	Sleep()
-}
-
-type interval struct {
-	duration time.Duration
-}
-
-func NewInterval(duration time.Duration) *interval {
-	return &interval{
-		duration: duration,
-	}
-}
-
-func (s *interval) Sleep() {
-	time.Sleep(s.duration)
-}
-
 func NewCounter(options ...option) (*counter, error) {
 	c := &counter{
 		writer:   os.Stdout,
-		interval: NewInterval(0 * time.Nanosecond),
+		interval: NewNoOpInterval(),
 	}
 
 	for _, opt := range options {
