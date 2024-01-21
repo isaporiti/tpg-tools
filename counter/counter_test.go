@@ -1,9 +1,12 @@
 package counter
 
-import "testing"
+import (
+	"bytes"
+	"testing"
+)
 
 func TestCounter_NewCounter(t *testing.T) {
-	t.Run("counter.NewCounter returns a pointer to a counter", func(t *testing.T) {
+	t.Run("NewCounter returns a pointer to a counter", func(t *testing.T) {
 		t.Parallel()
 
 		c, _ := NewCounter()
@@ -13,7 +16,7 @@ func TestCounter_NewCounter(t *testing.T) {
 		}
 	})
 
-	t.Run("counter.NewCounter accepts an initial value and sets it to the to the counter", func(t *testing.T) {
+	t.Run("NewCounter accepts an initial value and sets it to the to the counter", func(t *testing.T) {
 		t.Parallel()
 		c, _ := NewCounter(WithInitialCount(5))
 
@@ -23,7 +26,7 @@ func TestCounter_NewCounter(t *testing.T) {
 		}
 	})
 
-	t.Run("counter.NewCounter doesn't accept negative initial values", func(t *testing.T) {
+	t.Run("NewCounter doesn't accept negative initial values", func(t *testing.T) {
 		t.Parallel()
 		c, err := NewCounter(WithInitialCount(-1))
 
@@ -35,10 +38,14 @@ func TestCounter_NewCounter(t *testing.T) {
 			t.Errorf("Expected nil, got %v", c)
 		}
 	})
+
+	t.Run("NewCounter accepts an optional io.Writer", func(t *testing.T) {
+
+	})
 }
 
 func TestCounter_Next(t *testing.T) {
-	t.Run("counter.Next should return 0 on first call", func(t *testing.T) {
+	t.Run("Next should return 0 on first call", func(t *testing.T) {
 		t.Parallel()
 		c, _ := NewCounter()
 
@@ -49,7 +56,7 @@ func TestCounter_Next(t *testing.T) {
 		}
 	})
 
-	t.Run("counter.Next should return 0, 1, 2, 3 and so on on subsequent calls", func(t *testing.T) {
+	t.Run("Next should return 0, 1, 2, 3 and so on on subsequent calls", func(t *testing.T) {
 		t.Parallel()
 		c, _ := NewCounter()
 
@@ -59,6 +66,22 @@ func TestCounter_Next(t *testing.T) {
 				t.Errorf("Expected %v, got %v", want, got)
 				return
 			}
+		}
+	})
+}
+
+func TestCounter_Run(t *testing.T) {
+	t.Run("Run accpets a number of iterations and prints the result of Next that many times", func(t *testing.T) {
+		t.Parallel()
+		writer := &bytes.Buffer{}
+		c, _ := NewCounter(WithWriter(writer))
+
+		c.Run(5)
+
+		got := writer.String()
+		want := "0\n1\n2\n3\n4\n"
+		if got != want {
+			t.Errorf("Expected '%v', got '%v'", want, got)
 		}
 	})
 }
