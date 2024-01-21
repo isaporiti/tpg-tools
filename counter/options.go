@@ -2,6 +2,8 @@ package counter
 
 import (
 	"io"
+
+	"github.com/isaporiti/tpg-tools/interval"
 )
 
 type option func(*counter) error
@@ -20,9 +22,9 @@ func WithWriter(w io.Writer) option {
 	}
 }
 
-func WithInterval(interval Interval) option {
+func WithInterval(i interval.Interval) option {
 	return func(c *counter) error {
-		c.interval = interval
+		c.interval = i
 		return nil
 	}
 }

@@ -4,18 +4,20 @@ import (
 	"fmt"
 	"io"
 	"os"
+
+	"github.com/isaporiti/tpg-tools/interval"
 )
 
 type counter struct {
 	count    uint
 	writer   io.Writer
-	interval Interval
+	interval interval.Interval
 }
 
 func NewCounter(options ...option) (*counter, error) {
 	c := &counter{
 		writer:   os.Stdout,
-		interval: NewNoOpInterval(),
+		interval: interval.NewNoOpInterval(),
 	}
 
 	for _, opt := range options {

@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"testing"
 	"time"
+
+	"github.com/isaporiti/tpg-tools/interval"
 )
 
 func TestCounter_NewCounter(t *testing.T) {
@@ -107,6 +109,6 @@ func (s *stubInterval) Sleep() {
 	s.calls++
 }
 
-func newStubInterval(d time.Duration) Interval {
+func newStubInterval(d time.Duration) interval.Interval {
 	return &stubInterval{duration: d}
 }
